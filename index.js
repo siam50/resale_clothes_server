@@ -50,16 +50,23 @@ async function run() {
         });
 
         // Users API
+        app.get('/users', async (req, res) => {
+            const query = req.body;
+            const users = await usersCollection.find(query).toArray();
+            res.send(users)
+        });
+
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
             res.send(result);
         });
 
-        app.get('/users', async (req, res) => {
-            const query = {}
-            const result = await usersCollection.find(query).toArray();
-            res.send(result);
+        app.get('/users/seller/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email }
+            const user = await usersCollection.findOne(query);
+            res.send({ isSeller: user?.role === 'seller' });
         })
     }
     finally {
