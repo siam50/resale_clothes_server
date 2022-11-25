@@ -19,6 +19,7 @@ async function run() {
     try {
         const categoriesCollection = client.db('resaleClothes').collection('categories');
         const productsCollection = client.db('resaleClothes').collection('products');
+        const bookingsCollection = client.db('resaleClothes').collection('bookings');
 
         app.get('/categories', async (req, res) => {
             const query = {};
@@ -31,11 +32,19 @@ async function run() {
             const query = { categoryId: id };
             const result = await productsCollection.find(query).toArray();
             res.send(result)
-        })
+        });
 
+        // Products API
         app.post('/products', async (req, res) => {
             const product = req.body;
             const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
+
+        // Booking API
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            const result = await bookingsCollection.insertOne(booking);
             res.send(result);
         })
     }
