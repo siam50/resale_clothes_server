@@ -42,6 +42,12 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/products', async (req, res) => {
+            const query = {};
+            const products = await productsCollection.find(query).toArray();
+            res.send(products)
+        });
+
         // Booking API
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
@@ -60,6 +66,12 @@ async function run() {
             const query = { role: "buyer" };
             const buyers = await usersCollection.find(query).toArray();
             res.send(buyers)
+        });
+
+        app.get('/users/sellers', async (req, res) => {
+            const query = { role: "seller" };
+            const sellers = await usersCollection.find(query).toArray();
+            res.send(sellers)
         });
 
         app.post('/users', async (req, res) => {
