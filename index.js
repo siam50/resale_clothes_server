@@ -52,11 +52,28 @@ async function run() {
             res.send(products)
         });
 
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await productsCollection.deleteOne(filter);
+            res.send(result);
+        })
+
         // Booking API
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
             const result = await bookingsCollection.insertOne(booking);
             res.send(result);
+        });
+
+        app.get('/bookings', async (req, res) => {
+            const email = req.query.email;
+            let query = {};
+            if (email) {
+                query = { email: email }
+            }
+            const booking = await bookingsCollection.find(query).toArray();
+            res.send(booking)
         });
 
         // Users API
